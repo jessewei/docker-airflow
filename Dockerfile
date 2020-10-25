@@ -1,4 +1,4 @@
-# VERSION 1.10.9
+# VERSION 1.10.11
 # AUTHOR: Matthieu "Puckel_" Roisil
 # DESCRIPTION: Basic Airflow container
 # BUILD: docker build --rm -t puckel/docker-airflow .
@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
 # Airflow
-ARG AIRFLOW_VERSION=1.10.9
+ARG AIRFLOW_VERSION=1.10.11
 ARG AIRFLOW_USER_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS=""
 ARG PYTHON_DEPS=""
@@ -60,6 +60,9 @@ RUN set -ex \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
+	&& pip install marshmallow==3.0.0 \
+	&& pip uninstall -y SQLAlchemy \
+	&& pip install SQLAlchemy==1.3.15 \
     && pip install 'redis==3.2' \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && apt-get purge --auto-remove -yqq $buildDeps \
@@ -73,8 +76,15 @@ RUN set -ex \
         /usr/share/doc \
         /usr/share/doc-base
 
+
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
+
+# Copy oracle driver
+COPY client64 /usr/lib/oracle/11.2/client64
+COPY script/.bash_profile ${AIRFLOW_USER_HOME}/.bash_profile
+COPY script/query.py ${AIRFLOW_USER_HOME}/query.py
+
 
 RUN chown -R airflow: ${AIRFLOW_USER_HOME}
 
