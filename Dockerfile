@@ -59,14 +59,13 @@ RUN set -ex \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
+    && pip install cx_Oracle \	
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
-	&& pip install marshmallow==3.0.0 \
-	&& pip uninstall -y SQLAlchemy \
-	&& pip install SQLAlchemy==1.3.15 \
     && pip install 'redis==3.2' \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
+	&& apt-get install libaio1 \
     && apt-get clean \
     && rm -rf \
         /var/lib/apt/lists/* \
