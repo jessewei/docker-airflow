@@ -12,6 +12,12 @@ TRY_LOOP="20"
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
 : "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Sequential}Executor}"
 
+# for Oracle driver
+# export LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib/:$LD_LIBRARY_PATH
+# export ORACLE_HOME=/usr/lib/oracle/11.2/client64
+# export PATH=$PATH:$ORACLE_HOME/bin
+
+
 # Load DAGs examples (default: Yes)
 if [[ -z "$AIRFLOW__CORE__LOAD_EXAMPLES" && "${LOAD_EX:=n}" == n ]]; then
   AIRFLOW__CORE__LOAD_EXAMPLES=False

@@ -1,4 +1,4 @@
-# VERSION 1.10.11
+# VERSION 1.10.12
 # AUTHOR: Matthieu "Puckel_" Roisil
 # DESCRIPTION: Basic Airflow container
 # BUILD: docker build --rm -t puckel/docker-airflow .
@@ -12,11 +12,17 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
 # Airflow
-ARG AIRFLOW_VERSION=1.10.11
+ARG AIRFLOW_VERSION=1.10.12
 ARG AIRFLOW_USER_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS=""
 ARG PYTHON_DEPS=""
 ENV AIRFLOW_HOME=${AIRFLOW_USER_HOME}
+
+# Oracle
+ENV LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib/
+ENV ORACLE_HOME=/usr/lib/oracle/11.2/client64
+ENV PATH="$ORACLE_HOME/bin:${PATH}"
+
 
 # Define en_US.
 ENV LANGUAGE en_US.UTF-8

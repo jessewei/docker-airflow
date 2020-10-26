@@ -10,7 +10,7 @@ This repository contains **Dockerfile** of [apache-airflow](https://github.com/a
 
 Updated: add oracle client and cx_Oracle
 
-1. test2
+
 
 ## Informations
 
